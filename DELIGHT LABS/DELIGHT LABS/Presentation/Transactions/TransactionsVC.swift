@@ -27,6 +27,52 @@ class TransactionsVC: BaseMainVC {
     }
     
     private func bind() {
+        transactionsView.vList.btnAll // all
+            .rx
+            .tap
+            .map { .all }
+            .bind(to: vm.input.tapList)
+            .disposed(by: vm.bag)
         
+        transactionsView.vList.btnExpense // expense
+            .rx
+            .tap
+            .map { .expense }
+            .bind(to: vm.input.tapList)
+            .disposed(by: vm.bag)
+        
+        transactionsView.vList.btnIncome // income
+            .rx
+            .tap
+            .map { .income }
+            .bind(to: vm.input.tapList)
+            .disposed(by: vm.bag)
+        
+        vm.output
+            .tapList // 리스트 버튼 색 변경
+            .bind { [weak self] selected in
+                guard let self = self else { return }
+                
+                self.transactionsView.setListBtnColor(selected)
+            }.disposed(by: vm.bag)
+        
+        vm.output
+            .bindList // 리스트
+            .bind(to: transactionsView.vList.tvList
+                .rx
+                .items(cellIdentifier: TransactionsCell.id,
+                       cellType: TransactionsCell.self)
+            ) { (row, data, cell) in
+                
+                cell.setValue(data)
+            }.disposed(by: vm.bag)
+        
+        vm.output
+            .bindList // 리스트 높이
+            .bind { [weak self] list in
+                guard let self = self else { return }
+                
+                self.transactionsView.setListHeight(list.count)
+            }.disposed(by: vm.bag)
     }
 }

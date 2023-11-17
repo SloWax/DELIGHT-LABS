@@ -23,6 +23,7 @@ class TransactionsView: BaseView {
     private let btnBell = UIButton().then {
         let image = UIImage(systemName: "bell")
         $0.setImage(image, for: .normal)
+        $0.tintColor = .black
     }
     
     private let svMother = UIScrollView()
@@ -33,7 +34,7 @@ class TransactionsView: BaseView {
     
     private let vChart = ChartView()
     
-    private let vList = ListView()
+    let vList = ListView()
     
     
     override init(frame: CGRect) {
@@ -93,6 +94,30 @@ class TransactionsView: BaseView {
         svStack.snp.makeConstraints { make in
             make.left.right.equalTo(self)
             make.top.bottom.equalTo(svMother)
+        }
+    }
+    
+    func setListBtnColor(_ selected: TransactionsVM.Selected) {
+        vList.btns.forEach {
+            $0.setTitleColor(.systemGray4, for: .normal)
+        }
+        
+        switch selected {
+        case .all    : vList.btnAll.setTitleColor(.black, for: .normal)
+        case .expense: vList.btnExpense.setTitleColor(.black, for: .normal)
+        case .income : vList.btnIncome.setTitleColor(.black, for: .normal)
+        }
+    }
+    
+    func setListHeight(_ count: Int) {
+        let tvVisibleCells = vList.tvList.visibleCells
+        guard tvVisibleCells.count > 0 else { return }
+        
+        if let cell = tvVisibleCells.first as? TransactionsCell {
+            let height = CGFloat(count) * cell.frame.height
+            vList.tvList.snp.updateConstraints { make in
+                make.height.equalTo(height)
+            }
         }
     }
 }

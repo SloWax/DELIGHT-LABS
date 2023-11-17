@@ -19,6 +19,17 @@ class BaseVM {
     let error = PublishRelay<Error>()
     let toast = PublishRelay<String>()
     
+    func task<T: Codable>(_ type: T.Type, data: Data?, result: (T) -> Void) {
+        do {
+            if let data = data {
+                let parsing = try JSONDecoder().decode(T.self, from: data)
+                result(parsing)
+            }
+        } catch {
+            print("error: \(error)")
+        }
+    }
+    
     func clearBag() {
         self.bag = DisposeBag()
     }

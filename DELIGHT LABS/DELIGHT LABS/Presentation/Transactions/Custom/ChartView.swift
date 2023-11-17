@@ -14,7 +14,7 @@ import Then
 class ChartView: UIView {
     
     private let vDate = UIView().then {
-        $0.backgroundColor = .lightGray
+        $0.backgroundColor = .systemGray6
     }
     
     private let vIndicator = UIView().then {
@@ -23,14 +23,16 @@ class ChartView: UIView {
     
     private let btnDay = UIButton().then {
         $0.setTitle("Day", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
     }
     
     private let btnMonth = UIButton().then {
         $0.setTitle("Month", for: .normal)
+        $0.setTitleColor(.gray, for: .normal)
     }
     
     private let lblDate = UILabel().then {
-        $0.text = "date"
+        $0.text = Date().toString(dateFormat: "MMM dd, YYYY")
         $0.textColor = .gray
         $0.font = .systemFont(ofSize: 12)
     }
@@ -104,7 +106,7 @@ class ChartView: UIView {
         }
         
         btnDay.snp.makeConstraints { make in
-            make.top.bottom.equalTo(vDate).inset(10)
+            make.top.bottom.equalTo(vDate)
             make.width.equalTo(vDate).multipliedBy(0.5)
             make.left.equalTo(vDate)
         }
@@ -117,6 +119,7 @@ class ChartView: UIView {
         
         vDate.snp.makeConstraints { make in
             make.top.left.equalTo(self).inset(15)
+            make.right.equalTo(self.snp.centerX)
         }
         
         lblDate.snp.makeConstraints { make in
@@ -159,7 +162,7 @@ class ChartView: UIView {
         }
         
         lblUntilAt.snp.makeConstraints { make in
-            make.centerY.equalTo(lblfromAt).offset(15)
+            make.centerY.equalTo(lblfromAt)
             make.right.equalTo(vChart)
         }
     }
