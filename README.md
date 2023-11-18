@@ -8,6 +8,6 @@
 
 - mock 데이터를 활용한 거래내역과 차트 앱
 -  UIBezierPath 와 CABasicAnimation를 활용하여 CurveChart 구현
--  rxSwift를 활용한 Json & UI 비동기 처리
+-  RxSwift를 활용한 Json & UI 비동기 처리
 
 - 개발환경: Xcode 14.1
