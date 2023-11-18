@@ -32,7 +32,7 @@ class TransactionsView: BaseView {
         $0.axis = .vertical
     }
     
-    private let vChart = ChartView()
+    let vChart = ChartView()
     
     let vList = ListView()
     
@@ -94,6 +94,50 @@ class TransactionsView: BaseView {
         svStack.snp.makeConstraints { make in
             make.left.right.equalTo(self)
             make.top.bottom.equalTo(svMother)
+        }
+    }
+    
+    func setIndicatorPosition(_ value: (isDay: Bool, data: [TransactionsModel])) {
+        let dayColor: UIColor = value.isDay ? .white : .gray
+        let monthColor: UIColor = value.isDay ? .gray : .white
+        let offset = value.isDay ? 0 : vChart.vIndicator.frame.width
+        let fromAtText = value.isDay ? "00" : value.data.first?.time.toString(dateFormat: "MMM dd")
+        let untilAtText = value.isDay ? "24" : value.data.last?.time.toString(dateFormat: "MMM dd")
+        
+        vChart.btnDay.setTitleColor(dayColor, for: .normal)
+        vChart.btnMonth.setTitleColor(monthColor, for: .normal)
+        vChart.vIndicatorConstraint?.update(offset: offset)
+        vChart.lblfromAt.text = fromAtText
+        vChart.lblUntilAt.text = untilAtText
+        
+        let chartMother = vChart.vChartMother
+        chartMother.subviews.forEach { $0.removeFromSuperview() }
+        
+        let incomeData = value.data.filter{ $0.isPositive }
+        let expenseData = value.data.filter{ !$0.isPositive }
+        
+        let incomeChart = CurveChartView(
+            data: incomeData,
+            isDay: value.isDay,
+            isPositive: true
+        )
+        let expenseChart = CurveChartView(
+            data: expenseData,
+            isDay: value.isDay,
+            isPositive: false
+        )
+        
+        chartMother.addSubview(incomeChart)
+        chartMother.addSubview(expenseChart)
+        
+        incomeChart.snp.makeConstraints { make in
+            make.top.left.right.equalTo(chartMother)
+            make.bottom.equalTo(chartMother.snp.centerY)
+        }
+        
+        expenseChart.snp.makeConstraints { make in
+            make.top.equalTo(chartMother.snp.centerY)
+            make.left.right.bottom.equalTo(chartMother)
         }
     }
     

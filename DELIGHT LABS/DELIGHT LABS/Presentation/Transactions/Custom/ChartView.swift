@@ -15,20 +15,24 @@ class ChartView: UIView {
     
     private let vDate = UIView().then {
         $0.backgroundColor = .systemGray6
+        $0.clipsToBounds = true
     }
     
-    private let vIndicator = UIView().then {
+    let vIndicator = UIView().then {
         $0.backgroundColor = .purple
+        $0.clipsToBounds = true
     }
     
-    private let btnDay = UIButton().then {
+    let btnDay = UIButton().then {
         $0.setTitle("Day", for: .normal)
         $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = .boldSystemFont(ofSize: 14)
     }
     
-    private let btnMonth = UIButton().then {
+    let btnMonth = UIButton().then {
         $0.setTitle("Month", for: .normal)
         $0.setTitleColor(.gray, for: .normal)
+        $0.titleLabel?.font = .boldSystemFont(ofSize: 14)
     }
     
     private let lblDate = UILabel().then {
@@ -55,21 +59,23 @@ class ChartView: UIView {
         $0.font = .systemFont(ofSize: 12)
     }
     
-    private let vChart = UIView().then {
-        $0.backgroundColor = .red
+    let vChartMother = UIView().then {
+        $0.clipsToBounds = true
     }
     
-    private let lblfromAt = UILabel().then {
-        $0.text = "??"
+    let lblfromAt = UILabel().then {
+        $0.text = "00"
         $0.textColor = .lightGray
         $0.font = .systemFont(ofSize: 14)
     }
     
-    private let lblUntilAt = UILabel().then {
-        $0.text = "??"
+    let lblUntilAt = UILabel().then {
+        $0.text = "24"
         $0.textColor = .lightGray
         $0.font = .systemFont(ofSize: 14)
     }
+    
+    var vIndicatorConstraint: Constraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,17 +88,25 @@ class ChartView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let radius = vDate.frame.height / 2
+        vDate.cornerRadius = radius
+        vIndicator.cornerRadius = radius
+    }
+    
     private func setUP() {
-        let viewDates = [
+        let dateViews = [
             vIndicator, btnDay, btnMonth
         ]
         
-        vDate.addSubviews(viewDates)
+        vDate.addSubviews(dateViews)
         
         let views = [
             vDate, lblDate,
             vIncome, lblIncome, vExpense, lblExpense,
-            vChart, lblfromAt, lblUntilAt
+            vChartMother, lblfromAt, lblUntilAt
         ]
         
         self.addSubviews(views)
@@ -102,7 +116,7 @@ class ChartView: UIView {
         vIndicator.snp.makeConstraints { make in
             make.top.bottom.equalTo(vDate)
             make.width.equalTo(vDate).multipliedBy(0.5)
-            make.left.equalTo(vDate)
+            vIndicatorConstraint = make.left.equalTo(vDate).constraint
         }
         
         btnDay.snp.makeConstraints { make in
@@ -149,21 +163,21 @@ class ChartView: UIView {
             make.left.equalTo(vExpense.snp.right).offset(5)
         }
         
-        vChart.snp.makeConstraints { make in
+        vChartMother.snp.makeConstraints { make in
             make.top.equalTo(vIncome.snp.bottom).offset(15)
             make.left.right.equalTo(self).inset(15)
-            make.height.equalTo(vChart.snp.width).multipliedBy(0.75)
+            make.height.equalTo(vChartMother.snp.width).multipliedBy(0.75)
         }
         
         lblfromAt.snp.makeConstraints { make in
-            make.top.equalTo(vChart.snp.bottom).offset(15)
-            make.left.equalTo(vChart)
+            make.top.equalTo(vChartMother.snp.bottom).offset(15)
+            make.left.equalTo(vChartMother)
             make.bottom.equalTo(self)
         }
         
         lblUntilAt.snp.makeConstraints { make in
             make.centerY.equalTo(lblfromAt)
-            make.right.equalTo(vChart)
+            make.right.equalTo(vChartMother)
         }
     }
 }

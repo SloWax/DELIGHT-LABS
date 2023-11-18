@@ -6,24 +6,30 @@
 //
 
 import Foundation
+import RxSwift
 
 class JsonLoader {
     
     static let shared = JsonLoader()
     
-    func loadJson(result: (Result<Data, Error>) -> Void) {
-        let fileNm: String = "delightlabs-ios-hometest-mockdata"
-        let extensionType = "json"
-        let file = Bundle.main.url(forResource: fileNm, withExtension: extensionType)
-        
-        if let fileLocation = file {
-            do {
-                let data = try Data(contentsOf: fileLocation)
-                result(.success(data))
-            } catch {
-                print("error: \(error)")
-                result(.failure(error))
+    func loadJson()-> Observable<Data> {
+            return Observable.create() { observer in
+                DispatchQueue.global().async {
+                    let fileNm: String = "delightlabs-ios-hometest-mockdata"
+                    let extensionType = "json"
+                    let file = Bundle.main.url(forResource: fileNm, withExtension: extensionType)
+                    
+                    if let fileLocation = file {
+                        do {
+                            let data = try Data(contentsOf: fileLocation)
+                            observer.onNext(data)
+                        } catch {
+                            print("error: \(error)")
+                            observer.onError(error)
+                        }
+                    }
+                }
+                return Disposables.create()
             }
         }
-    }
 }

@@ -86,7 +86,7 @@ class TransactionsCell: UITableViewCell {
     func setValue(_ value: TransactionsModel) {
         lblName.text = value.name
         lblType.text = value.type
-        lblAmount.text = value.amount
-        lblDate.text = value.time
+        lblAmount.text = "\(value.amount)".toDollar(value.isPositive)
+        lblDate.text = value.time.toString()
     }
 }

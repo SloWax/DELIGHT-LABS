@@ -11,9 +11,9 @@ extension String {
     
     var toDate: Date {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
-        guard let date = dateFormatter.date(from: self) else { return Date() }
+        guard let date = dateFormatter.date(from: self) else { fatalError(self) }
         
         return date
     }

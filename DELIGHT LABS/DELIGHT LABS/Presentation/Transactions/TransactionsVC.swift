@@ -27,6 +27,20 @@ class TransactionsVC: BaseMainVC {
     }
     
     private func bind() {
+        transactionsView.vChart.btnDay // day
+            .rx
+            .tap
+            .map { true }
+            .bind(to: vm.input.tapIsDay)
+            .disposed(by: vm.bag)
+        
+        transactionsView.vChart.btnMonth // month
+            .rx
+            .tap
+            .map { false }
+            .bind(to: vm.input.tapIsDay)
+            .disposed(by: vm.bag)
+        
         transactionsView.vList.btnAll // all
             .rx
             .tap
@@ -47,6 +61,14 @@ class TransactionsVC: BaseMainVC {
             .map { .income }
             .bind(to: vm.input.tapList)
             .disposed(by: vm.bag)
+        
+        vm.output
+            .tapIsDay // chartView data 전달
+            .bind { [weak self] data in
+                guard let self = self else { return }
+                
+                self.transactionsView.setIndicatorPosition(data)
+            }.disposed(by: vm.bag)
         
         vm.output
             .tapList // 리스트 버튼 색 변경
