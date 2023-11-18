@@ -34,6 +34,10 @@ class TransactionsView: BaseView {
     
     let vChart = ChartView()
     
+    let indicator = UIActivityIndicatorView(style: .large).then {
+        $0.hidesWhenStopped = true
+    }
+    
     let vList = ListView()
     
     
@@ -54,6 +58,9 @@ class TransactionsView: BaseView {
         ]
         
         vTitle.addSubviews(titleViews)
+        
+        vChart.addSubview(indicator)
+        indicator.startAnimating()
         
         let arrangedSubviews = [
             vChart, vList
@@ -89,6 +96,10 @@ class TransactionsView: BaseView {
             make.top.equalTo(vTitle.snp.bottom)
             make.left.right.equalTo(self)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
+        }
+        
+        indicator.snp.makeConstraints { make in
+            make.center.equalTo(vChart.vChartMother)
         }
         
         svStack.snp.makeConstraints { make in
@@ -163,5 +174,7 @@ class TransactionsView: BaseView {
                 make.height.equalTo(height)
             }
         }
+        
+        indicator.stopAnimating()
     }
 }

@@ -92,6 +92,26 @@ class TransactionsVM: BaseVM {
             }.disposed(by: bag)
         
         getTransactions()
+        
+        Observable<Int>
+            .interval(.seconds(60), scheduler: MainScheduler.instance)
+            .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribe { [weak self] (value: Int) in
+                guard let self = self else { return }
+                
+                print("요청 \(value)")
+                
+                let untilList = allList.filter { $0.time < Date() }
+                self.untilList = untilList
+                
+                DispatchQueue.main.async {
+                    let isDayEvent = self.input.tapIsDay.value
+                    self.input.tapIsDay.accept(isDayEvent)
+                    
+                    let listEvent = self.input.tapList.value
+                    self.input.tapList.accept(listEvent)
+                }
+            }.disposed(by: bag)
     }
     
     private func getTransactions() {
@@ -125,7 +145,12 @@ class TransactionsVM: BaseVM {
                     DispatchQueue.main.async {
                         self.allList = convertList
                         self.untilList = untilList
-                        self.input.tapList.accept(.all)
+                        
+                        let isDayEvent = self.input.tapIsDay.value
+                        self.input.tapIsDay.accept(isDayEvent)
+                        
+                        let listEvent = self.input.tapList.value
+                        self.input.tapList.accept(listEvent)
                     }
                 }
             } onError: { [weak self] error in
