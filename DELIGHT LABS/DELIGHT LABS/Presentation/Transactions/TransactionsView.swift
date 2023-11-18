@@ -124,31 +124,39 @@ class TransactionsView: BaseView {
         let chartMother = vChart.vChartMother
         chartMother.subviews.forEach { $0.removeFromSuperview() }
         
-        let incomeData = value.data.filter{ $0.isPositive }
-        let expenseData = value.data.filter{ !$0.isPositive }
+        let incomeData = value.data.filter { $0.isPositive }
+        let expenseData = value.data.filter { !$0.isPositive }
         
         let incomeChart = CurveChartView(
             data: incomeData,
             isDay: value.isDay,
             isPositive: true
         )
-        let expenseChart = CurveChartView(
-            data: expenseData,
-            isDay: value.isDay,
-            isPositive: false
-        )
         
         chartMother.addSubview(incomeChart)
-        chartMother.addSubview(expenseChart)
         
         incomeChart.snp.makeConstraints { make in
-            make.top.left.right.equalTo(chartMother)
-            make.bottom.equalTo(chartMother.snp.centerY)
+            make.top.equalTo(chartMother).inset(15)
+            make.left.right.equalTo(chartMother)
+            make.bottom.equalTo(chartMother.snp.centerY).inset(30)
         }
         
-        expenseChart.snp.makeConstraints { make in
-            make.top.equalTo(chartMother.snp.centerY)
-            make.left.right.bottom.equalTo(chartMother)
+        let delayTime = DispatchTime.now() + 1.0
+        DispatchQueue.main.asyncAfter(deadline: delayTime) {
+            
+            let expenseChart = CurveChartView(
+                data: expenseData,
+                isDay: value.isDay,
+                isPositive: false
+            )
+            
+            chartMother.addSubview(expenseChart)
+            
+            expenseChart.snp.makeConstraints { make in
+                make.top.equalTo(chartMother.snp.centerY).offset(30)
+                make.left.right.equalTo(chartMother)
+                make.bottom.equalTo(chartMother).inset(15)
+            }
         }
     }
     
