@@ -1,0 +1,6 @@
+framework module Pods_DELIGHT_LABS {
+  umbrella header "Pods-DELIGHT LABS-umbrella.h"
+
+  export *
+  module * { export * }
+}
