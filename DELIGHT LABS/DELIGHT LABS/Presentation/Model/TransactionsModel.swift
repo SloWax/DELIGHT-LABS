@@ -8,9 +8,9 @@
 import Foundation
 
 struct TransactionsModel: Codable {
-    let amount: Double // ": "-1524.31"
-    let name: String // "Prince Vidal Trantow"
-    let time: Date // "2023-11-01T00:00:00Z"
-    let type: String // "transfer"
+    let amount: Double
+    let name: String
+    let time: Date
+    let type: String 
     let isPositive: Bool
 }

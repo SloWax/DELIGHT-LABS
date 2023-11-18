@@ -55,7 +55,7 @@ class ChartView: UIView {
     }
     
     private let lblExpense = UILabel().then {
-        $0.text = "InExpense"
+        $0.text = "Expense"
         $0.font = .systemFont(ofSize: 12)
     }
     

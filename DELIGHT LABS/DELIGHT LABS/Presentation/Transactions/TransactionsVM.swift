@@ -93,16 +93,35 @@ class TransactionsVM: BaseVM {
         
         getTransactions()
         
+        /*
+         여기부턴 현재시간에 도달한 내역을 mockData로부터
+         불러와 알림과 화면 새로고침을 구현하기 위한 코드로
+         실제 운영에선 사용되지 않는 방식
+         */
+        
         Observable<Int>
             .interval(.seconds(60), scheduler: MainScheduler.instance)
             .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribe { [weak self] (value: Int) in
                 guard let self = self else { return }
                 
-                print("요청 \(value)")
-                
                 let untilList = allList.filter { $0.time < Date() }
                 self.untilList = untilList
+                
+                if let item = untilList.last {
+                    let name = item.name
+                    let amount = "\(item.amount)".toDollar(item.isPositive)
+                    let subtitle = "\(name) \(amount)"
+                    let interval = DateInterval(start: Date(), end: Date().addingTimeInterval(1.0))
+                    let duration = interval.duration
+
+                    self.addNotification(
+                        identifier: "Transactions",
+                        title: "새로운 거래내역이 발생했어요",
+                        subtitle: subtitle,
+                        timeInterval: duration
+                    )
+                }
                 
                 DispatchQueue.main.async {
                     let isDayEvent = self.input.tapIsDay.value
@@ -157,5 +176,18 @@ class TransactionsVM: BaseVM {
                 guard let self = self else { return }
                 self.error.accept(error)
             }.disposed(by: bag)
+    }
+    
+    private func addNotification(identifier: String, title: String, subtitle: String = "", badge: NSNumber = 1, timeInterval: TimeInterval, repeats: Bool = false) {
+        let push =  UNMutableNotificationContent()
+        
+        push.title = title
+        push.subtitle = subtitle
+        push.badge = badge
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: repeats)
+        let request = UNNotificationRequest(identifier: identifier, content: push, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
 }

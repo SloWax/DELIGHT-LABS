@@ -24,6 +24,15 @@ class TransactionsVC: BaseMainVC {
     
     private func initialize() {
         view = transactionsView
+        
+        let userNotiCenter = UNUserNotificationCenter.current()
+        let notiAuthOptions = UNAuthorizationOptions(arrayLiteral: [.criticalAlert, .alert, .badge, .sound])
+        
+        userNotiCenter.requestAuthorization(options: notiAuthOptions) { (success, error) in
+            if let error = error {
+                print(error)
+            }
+        }
     }
     
     private func bind() {

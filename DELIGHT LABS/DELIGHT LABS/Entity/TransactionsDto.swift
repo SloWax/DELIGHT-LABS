@@ -12,9 +12,9 @@ struct TransactionsDto: Codable {
     }
     
     struct Response: Codable {
-        let amount: String // "-1524.31"
-        let name: String // "Prince Vidal Trantow"
-        let timestamp: String // "2023-11-01T00:00:00Z"
-        let type: String // "transfer"
+        let amount: String
+        let name: String
+        let timestamp: String
+        let type: String
     }
 }

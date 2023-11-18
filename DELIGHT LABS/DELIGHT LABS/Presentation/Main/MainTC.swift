@@ -33,7 +33,7 @@ class MainTC: UITabBarController {
         tabBarItemAppearance.normal.titleTextAttributes = nomalTitle
         tabBarItemAppearance.selected.titleTextAttributes = selectedTitle
         tabBarItemAppearance.selected.iconColor = .black
-
+        
         tabBarAppearance.stackedLayoutAppearance = tabBarItemAppearance
         tabBarAppearance.shadowImage = UIColor.gray.toImage(height: 0.5)
         
@@ -63,7 +63,7 @@ class MainTC: UITabBarController {
                 selectedImage: UIImage(systemName: "person.fill")
             ))
         ]
-
+        
         viewControllers = viewController.map { $0.navi }
         
         self.selectedIndex = 2
@@ -83,7 +83,7 @@ fileprivate class TabBarVC {
     var navi: BaseNC {
         let navi = BaseNC(rootViewController: vc)
         navi.tabBarItem = item
-
+        
         return navi
     }
 }
