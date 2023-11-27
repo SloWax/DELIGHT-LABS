@@ -6,7 +6,6 @@
 <img width="200" alt="7" src="https://github.com/SloWax/Resume/assets/62653558/6f9f0ba3-a435-439f-b27e-e6bb6bc3a89e">
 </p>
 
-<<<<<<< HEAD
 - mock 데이터를 활용한 지갑 입출금 내역과 이를 활용한 차트, 알림 앱
 - UIBezierPath 와 CABasicAnimation를 활용하여 CurveChart 구현
 - rxSwift를 활용한 Json & UI 비동기 처리
@@ -16,16 +15,5 @@
 - 라이브러리: 
   - RxSwift
   - RxCocoa
-  - RxGesture
-  - RealmSwift
-  - Kingfisher
-  - Alamofire
   - SnapKit
   - Then
-=======
-- mock 데이터를 활용한 거래내역과 차트 앱
--  UIBezierPath 와 CABasicAnimation를 활용하여 CurveChart 구현
--  RxSwift를 활용한 Json & UI 비동기 처리
-
-- 개발환경: Xcode 14.1
->>>>>>> 0f5fded267308ee87547bed32153fdf2a30d99dc
